@@ -1,0 +1,140 @@
+﻿EXCELLENT!!.............
+JUST IMPRESSIVE.........!!
+NICE ONE!!..............
+GOD LIKE!!................
+YOUR DA MAN!!!.....or WOMAN?
+SUPERB!!!..............
+MAGNIFICENT!!!.............
+OMG!!!!!!!!!!.............
+NO WAY BRO!!!!.............
+BLOWING MY MIND!!!............
+WOOOOOOOOO!!!!!...............YEAH!
+NO FREAKING WAY!!!!...............
+WHO'S DIS GUY??!!!............
+JUST WOW!!!!................
+AMAZING.....FIRE ON!!!!!
+
+
+
+UNSTOPPABLE!!!!!
+GODLIKE!!!!!!
+MASTER OF THE UNIVERSE!!!!!!!
+CLARK KENT!!!!!!!!!!!!!!
+NA WAH OOOOOOOOOOOOOOOOO!!!!!!!
+RAISE DA ROOF!!!!!!!!!!!!!!!!!!
+
+
+
+return lastNum switch
+		{
+			"0" => "B1",
+			"1" => "H3",
+			"2" => "G5",
+			"3" => "R8",
+			"4" => "A6",
+			"5" => "C0",
+			"6" => "P7",
+			"7" => "K4",
+			"8" => "Q2",
+			"9" => "Z9",
+			_ => null
+		};
+
+
+
+Name Of Participant:
+--------------------
+Date Of Test:
+------------
+Time Of Test:
+------------ 
+Raw Score:
+------------
+Execution Time:
+---------------
+Prcentage Score:
+----------------
+Overall Comment:
+----------------
+
+
+return $@"====================================================================
+Multiplication-Test Result Log--{dateTime:MM/dd/yyyy}:
+====================================================================
+--------------------------------------------------------------------
+>> Name Of Participant: {userName}
+----------------------
+>> Test Type: {num} 
+------------
+>> Date Of Test: {dateTime:D}
+---------------
+>> Time Of Test: {dateTime:T}
+---------------
+>> Raw Score: {score} out of {total} Marks
+------------
+>> Test Duration: {elapsedTime / 1000}s
+----------------
+>> Time-Calculated Percentage Score: {TimeFactor.Result}%
+-----------------------------------
+--------------------------------------------------------------------
+====================================================================
+====================================================================
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -";
+
+
+
+		Console.WriteLine("==========================================================================");
+
+		Console.WriteLine($"THANKS FOR TAKING THE TEST {UserName.ToUpper()}");
+
+		Console.WriteLine("==========================================================================");
+
+		Console.ForegroundColor = ConsoleColor.Yellow;
+		Console.Write("Press 0 to check your score:  ");
+		Console.Write("Press 1 to take the same test again:  ");
+		Console.ForegroundColor = ConsoleColor.White;
+		Console.WriteLine("\n==========================================================================");
+
+		do
+		{
+			string? subChoice = Console.ReadLine();
+			if (subChoice == "0")
+			{
+				ResultDisplay.Display(Score, Randomiser.RandomNumberList1, Stopwatch.ElapsedMilliseconds, UserName, TimesTableNumber, DateTime);
+				break;
+
+			}
+			else if (subChoice == "1")
+			{
+				Console.Clear();
+				Score = 0;
+				Stopwatch.Reset();
+				Test();
+				break;
+			}
+			else
+			{
+				_logger.Warn($"{UserName}, you did not enter a valid option number!");
+				_logger.Info("Enter a valid option number and try again!!\n");
+			}
+		} while (true);
+
+
+
+
+
+			try
+			{
+				//Call Time Factor to calculate Time-Based score
+				TimeFactor.Factor(Score, Randomiser.RandomNumberList1, Stopwatch.ElapsedMilliseconds);
+			}
+			catch (Exception ex)
+			{
+				Console.WriteLine(ex);
+			}
+
+			//Prepare Log result
+			var ResultLogText = ToFile.ResultLog(DateTime, UserName, TimesTableNumber, Score, Randomiser.RandomNumberList1.Count, Stopwatch.ElapsedMilliseconds);
+
+			//Log result to external file
+			_logger.WriteLog(ResultLogText);
